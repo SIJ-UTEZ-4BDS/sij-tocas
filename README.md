@@ -1,4 +1,4 @@
-# Sistema Integral de Gestión Judicial (SIJ Morelos) — peritos Module
+# Sistema Integral de Gestión Judicial (SIJ Morelos) — tocas Module
 
 ## Especificaciones Técnicas y Stack Tecnológico
 
