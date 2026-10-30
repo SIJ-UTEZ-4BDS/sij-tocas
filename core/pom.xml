@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>mx.edu.utez.sij</groupId>
-    <artifactId>sij-peritos</artifactId>
+    <artifactId>sij-tocas</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>peritos</name>
+    <name>tocas</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,7 +63,7 @@
     </dependencies>
 
     <build>
-        <finalName>sij-peritos</finalName>
+        <finalName>sij-tocas</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
