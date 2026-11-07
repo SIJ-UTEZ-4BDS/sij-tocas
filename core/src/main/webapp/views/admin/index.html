@@ -3,120 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIJ Morelos - Gobierno de Identidades y Personal</title>
+    <title>SIJ Morelos - Directorio de Personal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../assets/css/layout.css" rel="stylesheet">
-    <link href="../../assets/css/modulo.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../../assets/css/layout.css?v=4" rel="stylesheet">
+    <link href="../../assets/css/modulo.css?v=4" rel="stylesheet">
 </head>
 <body>
 <div class="app-layout">
     <aside class="sidebar-judicial">
-        <div class="p-3 text-center border-bottom border-secondary">
-            <h5 class="mb-0 fw-bold">SIJ MORELOS</h5>
-            <small class="text-white-50" id="sidebar-subtitle">Control de Accesos</small>
+        <div class="sidebar-brand-banner">
+            <i class="bi bi-bank2 fs-3"></i>
+            <h5 class="mb-0 fw-bold mt-1">SIJ MORELOS</h5>
+            <small id="sidebar-subtitle">Administración</small>
         </div>
         <nav class="mt-3">
-            <a href="index.html" class="nav-link active">Gestión de Personal</a>
-            <!-- Solo visible para los Administradores de cada Módulo (Oculto para el SUPER_ADMIN Cliente) -->
-            <a href="../dashboard/index.html" class="nav-link d-none" id="link-bandeja-modulo">Ir a Bandeja de mi Módulo</a>
-            <a href="../../api/auth/logout" class="nav-link text-warning mt-4">Cerrar Sesión</a>
+            <a href="index.html" class="nav-link active">
+                <i class="bi bi-table"></i>
+                <span>Directorio de Personal</span>
+            </a>
+            <a href="enrolar.html" class="nav-link">
+                <i class="bi bi-person-plus-fill"></i>
+                <span>Registrar Personal</span>
+            </a>
+            <a href="catalogos.html" class="nav-link">
+                <i class="bi bi-diagram-3-fill"></i>
+                <span>Distritos y Materias</span>
+            </a>
+            <a href="../oficialia/index.html" class="nav-link d-none" id="link-bandeja-modulo">
+                <i class="bi bi-folder2-open"></i>
+                <span>Bandeja Operativa</span>
+            </a>
+            <a href="../../api/auth/logout" class="nav-link mt-4">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Cerrar Sesión</span>
+            </a>
         </nav>
     </aside>
 
     <div class="main-content">
         <header class="topbar-judicial">
             <div>
-                <span class="fw-semibold" id="panel-title">Administración de Servidores Públicos</span>
-                <small class="text-muted ms-2" id="juzgado-context"></small>
+                <span class="fw-bold" id="panel-title">Directorio General de Servidores Públicos</span>
+                <small class="ms-2" id="juzgado-context"></small>
             </div>
-            <span class="badge bg-secondary" id="user-badge">Cargando...</span>
+            <span class="badge-sesion-global small" id="user-badge">Verificando sesión...</span>
         </header>
 
         <main class="p-4">
-            <div class="alert alert-light border small mb-4" id="hierarchy-banner">
-                Cargando permisos jerárquicos...
-            </div>
+            <div id="alert-main" class="alert d-none small py-2"></div>
 
-            <div class="row g-4">
-                <!-- Formulario de Alta y Edición -->
-                <div class="col-md-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <h5 class="fw-bold mb-3" id="form-title">Enrolar Nuevo Personal</h5>
-                            <div id="alert-admin" class="alert d-none small py-2"></div>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-people-fill" style="color: var(--dorado);"></i>
+                            <span id="table-title">Consulta General de Personal</span>
+                        </h6>
+                        <a href="enrolar.html" class="btn btn-institucional btn-sm px-3">
+                            <i class="bi bi-person-plus-fill me-1"></i> Nuevo Registro
+                        </a>
+                    </div>
 
-                            <form id="form-user">
-                                <input type="hidden" name="accion" id="input-accion" value="crear">
-                                <input type="hidden" name="idUsuario" id="input-id-usuario" value="">
-
-                                <div class="mb-2">
-                                    <label class="form-label small fw-semibold">Nombre Completo</label>
-                                    <input type="text" class="form-control form-control-sm" name="nombreCompleto" id="input-nombre" required>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label small fw-semibold">Correo Institucional</label>
-                                    <input type="email" class="form-control form-control-sm" name="correo" id="input-correo" required>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label small fw-semibold" id="label-password">Contraseña Inicial</label>
-                                    <input type="password" class="form-control form-control-sm" name="password" id="input-password" required>
-                                    <small class="text-muted d-none" id="help-password">Dejar en blanco si no desea cambiar la contraseña actual.</small>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label small fw-semibold">Rol Autorizado a Enrolar</label>
-                                    <select class="form-select form-select-sm" name="rol" id="select-rol" required></select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label small fw-semibold">Juzgado / Fiscalía de Adscripción</label>
-                                    <select class="form-select form-select-sm" name="idJuzgado" id="select-juzgado" required></select>
-                                </div>
-
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-institucional btn-sm py-2" id="btn-submit">
-                                        Generar Clave y Guardar
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm d-none" id="btn-cancel-edit" onclick="resetFormMode()">
-                                        Cancelar Edición
-                                    </button>
-                                </div>
-                            </form>
+                    <!-- Barra de Búsqueda Larga de Ancho Completo -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" id="smart-search"
+                                       placeholder="Buscar por clave de empleado, nombre completo, teléfono, correo, juzgado o rol..."
+                                       oninput="renderSmartTable()">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="filter-modulo" onchange="renderSmartTable()">
+                                <option value="">Todos los Módulos</option>
+                                <option value="OFICIALIA">Oficialía de Partes</option>
+                                <option value="AUDIENCIAS">Audiencias</option>
+                                <option value="TOCAS">Segunda Instancia (Tocas)</option>
+                                <option value="PERITOS">Coordinación de Peritos</option>
+                            </select>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tabla de Personal Subordinado -->
-                <div class="col-md-8">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fw-bold mb-0" id="table-title">Padrón Bajo su Adscripción</h5>
-                                <button class="btn btn-outline-dark btn-sm" onclick="loadUsers()">Actualizar</button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-sm align-middle">
-                                    <thead>
-                                    <tr>
-                                        <th>Clave</th>
-                                        <th>Servidor Público</th>
-                                        <th>Rol</th>
-                                        <th>Adscripción</th>
-                                        <th>Estado / Seguridad</th>
-                                        <th class="text-end">Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="users-table">
-                                    <tr>
-                                        <td><span class="skeleton"></span></td>
-                                        <td><span class="skeleton"></span></td>
-                                        <td><span class="skeleton"></span></td>
-                                        <td><span class="skeleton"></span></td>
-                                        <td><span class="skeleton"></span></td>
-                                        <td><span class="skeleton"></span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>Clave</th>
+                                <th>Nombre Completo</th>
+                                <th>Contacto</th>
+                                <th>Módulo / Rol</th>
+                                <th>Distrito / Juzgado</th>
+                                <th class="text-center">Estatus</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody id="users-table">
+                            <tr>
+                                <td><span class="skeleton"></span></td>
+                                <td><span class="skeleton"></span></td>
+                                <td><span class="skeleton"></span></td>
+                                <td><span class="skeleton"></span></td>
+                                <td><span class="skeleton"></span></td>
+                                <td><span class="skeleton"></span></td>
+                                <td><span class="skeleton"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -124,164 +118,285 @@
     </div>
 </div>
 
+<!-- MODAL 1: VER INFORMACIÓN -->
+<div class="modal fade" id="modalVerInfo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title mb-0"><i class="bi bi-person-vcard me-2" style="color: var(--dorado);"></i>Detalle del Servidor Público</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body small" id="info-modal-body"></div>
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-institucional btn-sm" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2: EDITAR -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title mb-0"><i class="bi bi-pencil-square me-2" style="color: var(--dorado);"></i>Modificar Datos de Personal</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="form-edit-user">
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="editar">
+                    <input type="hidden" name="idUsuario" id="edit-id">
+                    <div class="mb-2">
+                        <label class="form-label small">Nombre Completo</label>
+                        <input type="text" class="form-control form-control-sm" name="nombreCompleto" id="edit-nombre" required>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small">Correo Institucional</label>
+                            <input type="email" class="form-control form-control-sm" name="correo" id="edit-correo" required oninput="validarDuplicadoEdicion('correo', this)">
+                            <div class="invalid-feedback small" id="err-edit-correo"></div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small">Teléfono de Contacto</label>
+                            <input type="text" class="form-control form-control-sm" name="telefono" id="edit-telefono" maxlength="10" pattern="[0-9]{10}" required oninput="validarDuplicadoEdicion('telefono', this)">
+                            <div class="invalid-feedback small" id="err-edit-telefono"></div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Rol</label>
+                        <select class="form-select form-select-sm" name="rol" id="edit-rol" required></select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Distrito / Juzgado</label>
+                        <select class="form-select form-select-sm" name="idJuzgado" id="edit-juzgado" required></select>
+                    </div>
+                    <div class="mb-1">
+                        <label class="form-label small">Nueva Contraseña</label>
+                        <input type="password" class="form-control form-control-sm" name="password" id="edit-password" placeholder="Dejar vacío para conservar la contraseña actual">
+                    </div>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-institucional btn-sm" id="btn-save-edit">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 3: CONFIRMACIÓN -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title mb-0"><i class="bi bi-shield-exclamation me-2" style="color: var(--dorado);"></i>Confirmar Acción</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body small" id="confirm-modal-text"></div>
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-institucional btn-sm" id="btn-confirm-yes">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let currentUsers = [];
+    let allUsers = [];
+    let modalVer, modalEditar, modalConfirmar;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        modalVer = new bootstrap.Modal(document.getElementById('modalVerInfo'));
+        modalEditar = new bootstrap.Modal(document.getElementById('modalEditar'));
+        modalConfirmar = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+        loadUsers();
+    });
 
     async function loadUsers() {
         const res = await fetch('../../api/admin/users');
-        if (res.status === 401 || res.status === 403) {
+        if (res.status === 401) {
             window.location.href = '../../index.html';
             return;
         }
         const data = await res.json();
         if (!data.ok) return;
 
-        currentUsers = data.usuarios || [];
+        allUsers = data.usuarios || [];
+        document.getElementById('user-badge').textContent = `${data.miNombre} • ${data.miClave}`;
+        document.getElementById('juzgado-context').textContent = `| ${data.miJuzgado}`;
 
-        // Configurar cabeceras según si es el SUPER_ADMIN (Cliente) o el Admin de un Módulo
-        document.getElementById('user-badge').textContent = `${data.miNombre} (${data.miClave} | ${data.miRol})`;
-        document.getElementById('juzgado-context').textContent = `• ${data.miJuzgado}`;
-
-        const banner = document.getElementById('hierarchy-banner');
-        const linkBandeja = document.getElementById('link-bandeja-modulo');
-
-        if (data.esSuperAdmin) {
-            document.getElementById('sidebar-subtitle').textContent = 'Consola Raíz (Cliente)';
-            document.getElementById('panel-title').textContent = 'Gobierno Global de Administradores de Módulo';
-            document.getElementById('table-title').textContent = 'Administradores de Módulo Registrados';
-            banner.innerHTML = '<strong>Nivel SUPER_ADMIN (Consejo de la Judicatura):</strong> Desde este panel usted enrola y administra exclusivamente a los <strong>Administradores Titulares de cada Módulo</strong> (Oficialía, Audiencias, Tocas y Peritos). Cada Administrador de Módulo se encargará a su vez de enrolar al personal operativo de su propia fiscalía/juzgado.';
-            linkBandeja.classList.add('d-none');
-        } else {
-            document.getElementById('sidebar-subtitle').textContent = `Admin de Módulo`;
-            document.getElementById('panel-title').textContent = `Gestión de Personal Operativo`;
-            document.getElementById('table-title').textContent = `Personal Operativo de mi Módulo y Juzgado`;
-            banner.innerHTML = `<strong>Alcance de Módulo (${data.miRol}):</strong> Usted visualiza y administra únicamente al personal operativo de su propio módulo adscrito a <strong>${data.miJuzgado}</strong>.`;
-            linkBandeja.classList.remove('d-none');
+        const linkModulo = document.getElementById('link-bandeja-modulo');
+        if (!data.esSuperAdmin) {
+            linkModulo.href = data.rutaModuloPropio || '../oficialia/index.html';
+            linkModulo.classList.remove('d-none');
+            document.getElementById('filter-modulo').parentElement.classList.add('d-none');
+            document.getElementById('smart-search').parentElement.parentElement.className = 'col-12';
         }
 
-        // Poblar roles permitidos
-        const selectRol = document.getElementById('select-rol');
-        selectRol.innerHTML = (data.rolesPermitidos || []).map(r =>
-            `<option value="${r.codigo}">${r.etiqueta} (${r.codigo})</option>`
+        document.getElementById('edit-rol').innerHTML = (data.rolesPermitidos || []).map(r =>
+            `<option value="${r.codigo}">${r.etiqueta}</option>`
         ).join('');
-
-        // Poblar juzgados permitidos (Si es Admin de módulo solo viene el suyo y queda fijo)
-        const selectJuzgado = document.getElementById('select-juzgado');
-        selectJuzgado.innerHTML = (data.juzgadosPermitidos || []).map(j =>
+        document.getElementById('edit-juzgado').innerHTML = (data.juzgadosPermitidos || []).map(j =>
             `<option value="${j.idJuzgado}">${j.descripcion}</option>`
         ).join('');
 
-        // Renderizar tabla
+        renderSmartTable();
+    }
+
+    function renderSmartTable() {
+        const q = (document.getElementById('smart-search').value || '').toLowerCase().trim();
+        const modFilter = document.getElementById('filter-modulo').value;
+
+        const filtered = allUsers.filter(u => {
+            const matchMod = !modFilter || u.modulo === modFilter;
+            const matchText = !q ||
+                u.claveEmpleado.toLowerCase().includes(q) ||
+                u.nombreCompleto.toLowerCase().includes(q) ||
+                u.correo.toLowerCase().includes(q) ||
+                (u.telefono || '').toLowerCase().includes(q) ||
+                (u.modulo || '').toLowerCase().includes(q) ||
+                u.rol.toLowerCase().includes(q) ||
+                u.juzgado.toLowerCase().includes(q);
+            return matchMod && matchText;
+        });
+
         const tbody = document.getElementById('users-table');
-        if (currentUsers.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">No hay personal registrado bajo este alcance todavía.</td></tr>`;
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4">No se encontraron registros coincidentes.</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = currentUsers.map(u => `
-            <tr>
+        tbody.innerHTML = filtered.map(u => `
+            <tr class="${u.activo ? '' : 'opacity-75'}">
                 <td class="fw-bold small">${u.claveEmpleado}</td>
+                <td class="fw-semibold">${u.nombreCompleto}</td>
                 <td>
-                    <span class="fw-semibold">${u.nombreCompleto}</span><br>
-                    <small class="text-muted">${u.correo}</small>
+                    <span class="small"><i class="bi bi-telephone-fill me-1"></i>${u.telefono}</span><br>
+                    <small>${u.correo}</small>
                 </td>
-                <td><span class="badge bg-dark">${u.rol}</span></td>
+                <td>
+                    <span class="badge badge-rol-global">${u.modulo}</span><br>
+                    <small>${u.rol}</small>
+                </td>
                 <td><small>${u.juzgado}</small></td>
-                <td>
-                    <button onclick="toggleUser(${u.idUsuario})" class="btn btn-sm ${u.activo ? 'btn-outline-success' : 'btn-outline-danger'}">
-                        ${u.activo ? 'Activo' : 'Inactivo'}
-                    </button>
-                    ${u.bloqueado ? `<button onclick="unlockUser(${u.idUsuario})" class="btn btn-sm btn-warning ms-1" title="Desbloquear intentos">Desbloquear</button>` : ''}
+                <td class="text-center">
+                    <span class="badge badge-rol-global">${u.activo ? 'Activo' : 'Inactivo'}</span>
                 </td>
-                <td class="text-end">
-                    <button onclick="startEdit(${u.idUsuario})" class="btn btn-sm btn-outline-primary">Editar</button>
-                    <button onclick="deleteUser(${u.idUsuario})" class="btn btn-sm btn-outline-danger ms-1">Eliminar</button>
+                <td class="text-center">
+                    <div class="d-inline-flex gap-1">
+                        <button onclick="verInfo(${u.idUsuario})" class="btn-icon-action icon-dorado" title="Consultar información">
+                            <i class="bi bi-eye-fill"></i>
+                        </button>
+                        <button onclick="abrirEditar(${u.idUsuario})" class="btn-icon-action" title="Modificar datos">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button onclick="confirmarToggle(${u.idUsuario})" class="btn-icon-action" title="${u.activo ? 'Desactivar cuenta' : 'Activar cuenta'}">
+                            <i class="bi ${u.activo ? 'bi-person-slash' : 'bi-person-check-fill'}"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         `).join('');
     }
 
-    function startEdit(idUsuario) {
-        const u = currentUsers.find(item => item.idUsuario === idUsuario);
+    function verInfo(idUsuario) {
+        const u = allUsers.find(x => x.idUsuario === idUsuario);
         if (!u) return;
+        document.getElementById('info-modal-body').innerHTML = `
+            <div class="row g-2">
+                <div class="col-6"><strong>Clave de Empleado:</strong><br>${u.claveEmpleado}</div>
+                <div class="col-6"><strong>Módulo:</strong><br><span class="badge badge-rol-global">${u.modulo}</span></div>
+                <div class="col-12"><hr class="my-1"></div>
+                <div class="col-12"><strong>Nombre Completo:</strong><br>${u.nombreCompleto}</div>
+                <div class="col-6"><strong>Teléfono de Contacto:</strong><br>${u.telefono}</div>
+                <div class="col-6"><strong>Correo Institucional:</strong><br>${u.correo}</div>
+                <div class="col-12"><strong>Distrito y Juzgado:</strong><br>${u.juzgado}</div>
+                <div class="col-6"><strong>Rol Asignado:</strong><br>${u.rol}</div>
+                <div class="col-6"><strong>Estatus de Cuenta:</strong><br>${u.activo ? 'Activo' : 'Inactivo'}</div>
+            </div>
+        `;
+        modalVer.show();
+    }
 
-        document.getElementById('form-title').textContent = `Editar: ${u.claveEmpleado}`;
-        document.getElementById('input-accion').value = 'editar';
-        document.getElementById('input-id-usuario').value = u.idUsuario;
-        document.getElementById('input-nombre').value = u.nombreCompleto;
-        document.getElementById('input-correo').value = u.correo;
-        document.getElementById('select-rol').value = u.rol;
-        if (u.idJuzgado) {
-            document.getElementById('select-juzgado').value = u.idJuzgado;
+    function abrirEditar(idUsuario) {
+        const u = allUsers.find(x => x.idUsuario === idUsuario);
+        if (!u) return;
+        document.getElementById('edit-id').value = u.idUsuario;
+        document.getElementById('edit-nombre').value = u.nombreCompleto;
+        document.getElementById('edit-correo').value = u.correo;
+        document.getElementById('edit-telefono').value = u.telefono !== 'Sin registro' ? u.telefono : '';
+        document.getElementById('edit-rol').value = u.rol;
+        if (u.idJuzgado) document.getElementById('edit-juzgado').value = u.idJuzgado;
+        document.getElementById('edit-password').value = '';
+        modalEditar.show();
+    }
+
+    let timerEdit;
+    function validarDuplicadoEdicion(campo, inputEl) {
+        clearTimeout(timerEdit);
+        const valor = inputEl.value.trim();
+        const idExcluir = document.getElementById('edit-id').value;
+        const errBox = document.getElementById('err-edit-' + campo);
+
+        if (!valor) {
+            inputEl.classList.remove('is-invalid');
+            return;
         }
-
-        const passInput = document.getElementById('input-password');
-        passInput.value = '';
-        passInput.required = false;
-        document.getElementById('label-password').textContent = 'Nueva Contraseña (Opcional)';
-        document.getElementById('help-password').classList.remove('d-none');
-
-        document.getElementById('btn-submit').textContent = 'Guardar Cambios';
-        document.getElementById('btn-cancel-edit').classList.remove('d-none');
+        timerEdit = setTimeout(async () => {
+            const res = await fetch(`../../api/admin/users?accion=validarDuplicado&campo=${campo}&valor=${encodeURIComponent(valor)}&idExcluir=${idExcluir}`);
+            const data = await res.json();
+            if (data.duplicado) {
+                inputEl.classList.add('is-invalid');
+                errBox.textContent = data.mensaje;
+                document.getElementById('btn-save-edit').disabled = true;
+            } else {
+                inputEl.classList.remove('is-invalid');
+                document.getElementById('btn-save-edit').disabled = false;
+            }
+        }, 250);
     }
 
-    function resetFormMode() {
-        const form = document.getElementById('form-user');
-        form.reset();
-        document.getElementById('form-title').textContent = 'Enrolar Nuevo Personal';
-        document.getElementById('input-accion').value = 'crear';
-        document.getElementById('input-id-usuario').value = '';
-
-        const passInput = document.getElementById('input-password');
-        passInput.required = true;
-        document.getElementById('label-password').textContent = 'Contraseña Inicial';
-        document.getElementById('help-password').classList.add('d-none');
-
-        document.getElementById('btn-submit').textContent = 'Generar Clave y Guardar';
-        document.getElementById('btn-cancel-edit').classList.add('d-none');
-    }
-
-    async function toggleUser(idUsuario) {
-        const params = new URLSearchParams({ accion: 'toggle', idUsuario });
-        await fetch('../../api/admin/users', { method: 'POST', body: params });
-        loadUsers();
-    }
-
-    async function unlockUser(idUsuario) {
-        const params = new URLSearchParams({ accion: 'desbloquear', idUsuario });
-        await fetch('../../api/admin/users', { method: 'POST', body: params });
-        loadUsers();
-    }
-
-    async function deleteUser(idUsuario) {
-        if (!confirm('¿Confirmas eliminar este registro de servidor público?')) return;
-        const params = new URLSearchParams({ accion: 'eliminar', idUsuario });
-        const res = await fetch('../../api/admin/users', { method: 'POST', body: params });
-        const data = await res.json();
-        showAlert(data.ok, data.mensaje);
-        loadUsers();
-    }
-
-    function showAlert(ok, msg) {
-        const alertBox = document.getElementById('alert-admin');
-        alertBox.className = `alert small py-2 ${ok ? 'alert-success' : 'alert-danger'}`;
-        alertBox.textContent = msg;
-    }
-
-    document.getElementById('form-user').addEventListener('submit', async (e) => {
+    document.getElementById('form-edit-user').addEventListener('submit', (e) => {
         e.preventDefault();
-        const params = new URLSearchParams(new FormData(e.target));
-        const res = await fetch('../../api/admin/users', { method: 'POST', body: params });
-        const data = await res.json();
-
-        showAlert(data.ok, data.mensaje);
-        if (data.ok) {
-            resetFormMode();
+        const nombre = document.getElementById('edit-nombre').value;
+        pedirConfirmacion(`¿Confirma guardar las modificaciones del registro "${nombre}"?`, async () => {
+            const params = new URLSearchParams(new FormData(e.target));
+            const res = await fetch('../../api/admin/users', { method: 'POST', body: params });
+            const data = await res.json();
+            mostrarAlerta(data.ok, data.mensaje);
+            modalEditar.hide();
             loadUsers();
-        }
+        });
     });
 
-    loadUsers();
+    function confirmarToggle(idUsuario) {
+        const u = allUsers.find(x => x.idUsuario === idUsuario);
+        if (!u) return;
+        const accionTexto = u.activo ? 'desactivar la cuenta' : 'reactivar la cuenta';
+        pedirConfirmacion(`¿Confirma ${accionTexto} de "${u.nombreCompleto}" (${u.claveEmpleado})?`, async () => {
+            const params = new URLSearchParams({ accion: 'toggle', idUsuario });
+            const res = await fetch('../../api/admin/users', { method: 'POST', body: params });
+            const data = await res.json();
+            mostrarAlerta(data.ok, data.mensaje);
+            loadUsers();
+        });
+    }
+
+    function pedirConfirmacion(texto, callback) {
+        document.getElementById('confirm-modal-text').textContent = texto;
+        document.getElementById('btn-confirm-yes').onclick = async () => {
+            modalConfirmar.hide();
+            await callback();
+        };
+        modalConfirmar.show();
+    }
+
+    function mostrarAlerta(ok, msg) {
+        const box = document.getElementById('alert-main');
+        box.className = `alert small py-2 ${ok ? 'alert-success' : 'alert-danger'}`;
+        box.textContent = msg;
+    }
 </script>
 </body>
 </html>
